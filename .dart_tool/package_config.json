@@ -63,7 +63,7 @@
     },
     {
       "name": "firebase_messaging",
-      "rootUri": "file:///Users/def/.pub-cache/hosted/pub.dev/firebase_messaging-14.7.10",
+      "rootUri": "file:///Users/def/.pub-cache/git/custom_flutter_firebase_messaging-2914904ce282c31ee12048bef9d3ed8fb14dbbd1/",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -200,7 +200,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2024-02-14T09:22:54.943459Z",
+  "generated": "2024-02-14T09:35:45.027752Z",
   "generator": "pub",
   "generatorVersion": "3.2.2"
 }

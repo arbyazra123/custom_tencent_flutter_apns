@@ -4,12 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 class FirebasePushConnector extends PushConnector {
-  late final firebase = FirebaseMessaging.instance;
-
   @override
   final isDisabledByUser = ValueNotifier<bool?>(null);
 
   bool didInitialize = false;
+  String? name;
 
   @override
   Future<void> configure({
@@ -18,15 +17,24 @@ class FirebasePushConnector extends PushConnector {
     MessageHandler? onResume,
     MessageHandler? onBackgroundMessage,
     FirebaseOptions? options,
+    String? name,
   }) async {
+    this.name = name;
+    late FirebaseMessaging firMsg;
+    if (name != null) {
+      firMsg = FirebaseMessaging.instanceFor(name);
+    } else {
+      firMsg = FirebaseMessaging.instance;
+    }
     if (!didInitialize) {
       await Firebase.initializeApp(
+        name: name,
         options: options,
       );
       didInitialize = true;
     }
 
-    firebase.onTokenRefresh.listen((value) {
+    firMsg.onTokenRefresh.listen((value) {
       token.value = value;
     });
 
@@ -36,13 +44,12 @@ class FirebasePushConnector extends PushConnector {
     if (onBackgroundMessage != null) {
       FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
     }
-
-    final initial = await FirebaseMessaging.instance.getInitialMessage();
+    final initial = await firMsg.getInitialMessage();
     if (initial != null) {
       onLaunch?.call(initial);
     }
 
-    token.value = await firebase.getToken();
+    token.value = await firMsg.getToken();
   }
 
   @override
@@ -50,12 +57,18 @@ class FirebasePushConnector extends PushConnector {
 
   @override
   void requestNotificationPermissions() async {
+    late FirebaseMessaging firMsg;
+    if (name != null) {
+      firMsg = FirebaseMessaging.instanceFor(name!);
+    } else {
+      firMsg = FirebaseMessaging.instance;
+    }
     if (!didInitialize) {
       await Firebase.initializeApp();
       didInitialize = true;
     }
 
-    NotificationSettings permissions = await firebase.requestPermission(
+    NotificationSettings permissions = await firMsg.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -77,8 +90,14 @@ class FirebasePushConnector extends PushConnector {
 
   @override
   Future<void> unregister() async {
-    await firebase.setAutoInitEnabled(false);
-    await firebase.deleteToken();
+    late FirebaseMessaging firMsg;
+    if (name != null) {
+      firMsg = FirebaseMessaging.instanceFor(name!);
+    } else {
+      firMsg = FirebaseMessaging.instance;
+    }
+    await firMsg.setAutoInitEnabled(false);
+    await firMsg.deleteToken();
 
     token.value = null;
   }
