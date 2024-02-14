@@ -6,7 +6,8 @@ import 'connector.dart';
 
 class ApnsPushConnector extends ApnsPushConnectorOnly implements PushConnector {
   @override
-  Future<void> configure({onMessage, onLaunch, onResume, onBackgroundMessage, options}) {
+  Future<void> configure(
+      {onMessage, onLaunch, onResume, onBackgroundMessage, options, name}) {
     ApnsMessageHandler? mapHandler(MessageHandler? input) {
       if (input == null) {
         return null;
@@ -16,10 +17,11 @@ class ApnsPushConnector extends ApnsPushConnectorOnly implements PushConnector {
     }
 
     configureApns(
-        onMessage: mapHandler(onMessage),
-        onLaunch: mapHandler(onLaunch),
-        onResume: mapHandler(onResume),
-        onBackgroundMessage: mapHandler(onBackgroundMessage));
+      onMessage: mapHandler(onMessage),
+      onLaunch: mapHandler(onLaunch),
+      onResume: mapHandler(onResume),
+      onBackgroundMessage: mapHandler(onBackgroundMessage),
+    );
 
     return Future<void>.value();
   }

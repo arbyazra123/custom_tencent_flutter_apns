@@ -22,7 +22,7 @@ dependencies:
   firebase_messaging:
     git:
       url: https://github.com/arbyazra123/custom_flutter_firebase_messaging.git
-      ref: 2914904ce282c31ee12048bef9d3ed8fb14dbbd1
+      ref: ece32d3f123f72eea17f9794e57a78b3be7b7afb
   flutter_apns_only: ^1.5.2
 
 dev_dependencies:
